@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_map/pages/MapPage.dart';
+import 'package:google_map/pages/direction.dart';
+import 'package:google_map/pages/predictPlaces.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +20,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MapPage(),
+      //home: MapPage(),
+      //home: predictPlaces(),
+      home: direction(),
     );
   }
 }

@@ -10,8 +10,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
-  static const LatLng _pApplePark = LatLng(37.3346, -122.0090);
+  static const LatLng _pSource = LatLng(37.4223, -122.0848);
+  static const LatLng _pDestination = LatLng(37.3346, -122.0090);
 
   //For getting Current Location
   Location _locationController = new Location();
@@ -83,19 +83,30 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
+
+      //IF Current Position = null
+      body: _currentP == null ? const Center(
+        child: Text('Loading...'),
+      )
+      
+      //If we have the Current Position
+      : GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: _pGooglePlex, 
+          target: _currentP!, 
           zoom: 13),
 
           markers: { 
             Marker(markerId: MarkerId("_currentLocation"), 
-            icon: BitmapDescriptor.defaultMarker, 
-            position: _pGooglePlex),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue), 
+            position: _currentP!),
 
-            Marker(markerId: MarkerId("_sourceLocation"),
+            Marker(markerId: MarkerId("_sourceLocation"), 
+            icon: BitmapDescriptor.defaultMarker, 
+            position: _pSource),
+
+            Marker(markerId: MarkerId("_destinationLocation"),
             icon: BitmapDescriptor.defaultMarker,
-            position: _pApplePark)
+            position: _pDestination)
           },
       ),
     );
