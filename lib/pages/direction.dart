@@ -15,6 +15,56 @@ class _directionState extends State<direction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+            appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 77, 47, 1),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        title: Container(
+          height: 40,
+          child: TextField(
+            // controller: searchthisctrl,
+            textAlign: TextAlign.left,
+            decoration: InputDecoration(
+              hintText: 'Search tour',
+              filled: true,
+              fillColor: Colors.white,
+              hintStyle: GoogleFonts.merriweatherSans(
+                fontSize: 14,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(255, 107, 0, 1),
+                  width: 2.0,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
+                  width: 0.5,
+                ),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+
+
+
+
+
+
         body: Column(
       children: [
         //SOURCE

@@ -59,7 +59,7 @@ class _predictPlacesState extends State<predictPlaces> {
                                         fontSize: 15,
                                         color: Colors.black,
                                       ),
-                                      googleAPIKey: "AIzaSyDd_DAaGN6XCBtM0KPjYn1AZjhU9c2KzC4",
+                                      googleAPIKey: "",
                                       inputDecoration: const InputDecoration(
                                         border: InputBorder.none,
                                         enabledBorder: InputBorder.none,
