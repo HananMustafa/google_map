@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_map/pages/MapPage.dart';
+import 'package:google_map/pages/pickDestination.dart';
+import 'package:google_map/pages/pickSource.dart';
 
 class direction extends StatefulWidget {
   const direction({super.key});
@@ -17,17 +20,27 @@ class _directionState extends State<direction> {
     return Scaffold(
 
             appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 77, 47, 1),
+              toolbarHeight: 140,
+        backgroundColor: Color.fromRGBO(62, 75, 255, 1),
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
-        title: Container(
+        title: Column(children: [
+
+          //SOURCE
+          Container(
+          // alignment: Alignment.center,
           height: 40,
-          child: TextField(
-            // controller: searchthisctrl,
+          child: InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>pickSource()));
+            },
+            child: TextField(
+            // controller: sourceCTRL,
+            enabled: false,
             textAlign: TextAlign.left,
             decoration: InputDecoration(
-              hintText: 'Search tour',
+              hintText: 'Choose source',
               filled: true,
               fillColor: Colors.white,
               hintStyle: GoogleFonts.merriweatherSans(
@@ -40,7 +53,7 @@ class _directionState extends State<direction> {
               ),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color.fromRGBO(255, 107, 0, 1),
+                  color: Color.fromRGBO(62, 75, 255, 1),
                   width: 2.0,
                 ),
               ),
@@ -50,69 +63,62 @@ class _directionState extends State<direction> {
                   width: 0.5,
                 ),
               ),
-              suffixIcon: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                },
-              ),
+              // suffixIcon: IconButton(
+              //   icon: Icon(Icons.search),
+              //   onPressed: () {
+              //   },
+              // ),
             ),
           ),
-        ),
-      ),
-
-
-
-
-
-
-        body: Column(
-      children: [
-        //SOURCE
-        Container(
-          margin: const EdgeInsets.only(top: 30, right: 20, left: 20),
-          alignment: Alignment.topLeft,
-          child: TextField(
-            controller: sourceCTRL,
-            textAlign: TextAlign.start,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(255, 107, 0, 1),
-                  width: 2.0,
-                ),
-              ),
-              hintText: 'Choose source',
-              hintStyle: GoogleFonts.merriweatherSans(fontSize: 10),
-              isCollapsed: true,
-              contentPadding: const EdgeInsets.all(5),
-            ),
           ),
         ),
+
+
+
 
         //DESTINATION
         Container(
-          margin: const EdgeInsets.only(top: 30, right: 20, left: 20),
-          alignment: Alignment.topLeft,
-          child: TextField(
-            controller: destinationCTRL,
-            textAlign: TextAlign.start,
+          margin: EdgeInsets.only(top:10),
+          height: 40,
+          child: InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>pickDestination()));
+            },
+            child: TextField(
+            // controller: sourceCTRL,
+            enabled: false,
+            textAlign: TextAlign.left,
             decoration: InputDecoration(
-              border: const OutlineInputBorder(),
+              hintText: 'Choose destination',
+              filled: true,
+              fillColor: Colors.white,
+              hintStyle: GoogleFonts.merriweatherSans(
+                fontSize: 14,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide.none,
+              ),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color.fromRGBO(255, 107, 0, 1),
+                  color: Color.fromRGBO(62, 75, 255, 1),
                   width: 2.0,
                 ),
               ),
-              hintText: 'Choose destination',
-              hintStyle: GoogleFonts.merriweatherSans(fontSize: 10),
-              isCollapsed: true,
-              contentPadding: const EdgeInsets.all(5),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
+                  width: 0.5,
+                ),
+              ),
             ),
           ),
+          ),
         ),
-      ],
-    ));
+        ],)
+      ),
+
+);
   }
 }
