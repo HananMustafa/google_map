@@ -21,6 +21,7 @@ dependencies:
   location: ^7.0.1
   google_places_flutter: ^2.0.9
   google_fonts: ^6.2.0
+  flutter_dotenv: ^5.2.1
 
 
 
@@ -35,3 +36,6 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+      - .env

@@ -3,16 +3,30 @@ import 'package:google_map/pages/direction.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+class route extends StatefulWidget {
+  final double sourceLat;
+  final double sourceLong;
+  final double destLat;
+  final double destLong;
+
+  const route({
+    super.key,
+    required this.sourceLat,
+    required this.sourceLong,
+    required this.destLat,
+    required this.destLong
+    });
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<route> createState() => _routeState();
 }
 
-class _MapPageState extends State<MapPage> {
-  static const LatLng _pSource = LatLng(33.5968788, 73.0528412);
-  static const LatLng _pDestination = LatLng(33.5968788, 73.0528412);
+class _routeState extends State<route> {
+  // static const LatLng _pSource = LatLng(37.4219983, -122.084);
+  // static const LatLng _pDestination = LatLng(37.5968788, -122.0528412);
+
+  late LatLng _pSource;
+  late LatLng _pDestination;
 
   //For getting Current Location
   Location _locationController = new Location();
@@ -25,6 +39,8 @@ class _MapPageState extends State<MapPage> {
   @override
   initState() {
     super.initState();
+    _pSource= LatLng(widget.sourceLat, widget.sourceLong);
+    _pDestination= LatLng(widget.destLat, widget.destLong);
     getLocationUpdates();
   }
 
@@ -62,6 +78,8 @@ class _MapPageState extends State<MapPage> {
               sourceDescription= "Your Location";
 
           print("Ping: $_currentP");
+          print("Source Lat: ${widget.sourceLat}");
+          print("Source Long: ${widget.sourceLong}");
         });
       }
     });

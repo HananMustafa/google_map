@@ -5,7 +5,16 @@ import 'package:google_map/pages/pickDestination.dart';
 import 'package:google_map/pages/pickSource.dart';
 
 class direction extends StatefulWidget {
-  const direction({super.key});
+  final double sourceLat;
+  final double sourceLong;
+  final String sourceDescription;
+
+  const direction({
+    super.key,
+    required this.sourceLat,
+    required this.sourceLong,
+    required this.sourceDescription
+    });
 
   @override
   State<direction> createState() => _directionState();
@@ -36,11 +45,11 @@ class _directionState extends State<direction> {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>pickSource()));
             },
             child: TextField(
-            // controller: sourceCTRL,
+            controller: sourceCTRL,
             enabled: false,
             textAlign: TextAlign.left,
             decoration: InputDecoration(
-              hintText: 'Choose source',
+              hintText: widget.sourceDescription,
               filled: true,
               fillColor: Colors.white,
               hintStyle: GoogleFonts.merriweatherSans(
@@ -82,7 +91,10 @@ class _directionState extends State<direction> {
           height: 40,
           child: InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>pickDestination()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>pickDestination(
+                sourceLat: widget.sourceLat, 
+                sourceLong: widget.sourceLong
+                )));
             },
             child: TextField(
             // controller: sourceCTRL,

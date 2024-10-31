@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_map/main.dart';
+import 'package:google_map/pages/direction.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
@@ -11,10 +14,15 @@ class pickSource extends StatefulWidget {
   State<pickSource> createState() => _pickSourceState();
 }
 
+void main() async{
+  await dotenv.load(fileName: ".env");
+  runApp(const MyApp());
+}
+
 class _pickSourceState extends State<pickSource> {
   TextEditingController predictctrl = new TextEditingController();
-  double dlat = 0;
-  double dlng = 0;
+  double slat = 0;
+  double slng = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class _pickSourceState extends State<pickSource> {
           fontSize: 15,
           color: Colors.black,
         ),
-        googleAPIKey: "",
+        googleAPIKey: dotenv.env["API_KEY"]!,
         inputDecoration: const InputDecoration(
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -59,12 +67,18 @@ class _pickSourceState extends State<pickSource> {
         isLatLngRequired: true,
         getPlaceDetailWithLatLng: (Prediction prediction) {
           log(prediction.description.toString());
+          log(prediction.lat.toString());
           ////focusNode.unfocus();
           SystemChannels.textInput.invokeMethod('TextInput.hide');
           // sheetHeight = 25.h;
-          dlat = double.parse(prediction.lat!);
-          dlng = double.parse(prediction.lng!);
+          slat = double.parse(prediction.lat!);
+          slng = double.parse(prediction.lng!);
 
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>direction(
+            sourceLat: slat, 
+            sourceLong: slng, 
+            sourceDescription: prediction.description.toString()
+            )));
           // _updateSelectedLocation(
           //     LatLng(itemlat, itemlng));
           // _getRoute();

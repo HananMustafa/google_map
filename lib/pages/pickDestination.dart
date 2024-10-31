@@ -1,11 +1,24 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_map/main.dart';
+import 'package:google_map/pages/route.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
+void main() async{
+  await dotenv.load(fileName: ".env");
+  runApp(const MyApp());
+}
 class pickDestination extends StatefulWidget {
-  const pickDestination({super.key});
+  final double sourceLat;
+  final double sourceLong;
+  const pickDestination({
+    super.key,
+    required this.sourceLat,
+    required this.sourceLong
+    });
 
   @override
   State<pickDestination> createState() => _pickDestinationState();
@@ -48,7 +61,7 @@ class _pickDestinationState extends State<pickDestination> {
           fontSize: 15,
           color: Colors.black,
         ),
-        googleAPIKey: "",
+        googleAPIKey: dotenv.env["API_KEY"]!,
         inputDecoration: const InputDecoration(
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -64,6 +77,13 @@ class _pickDestinationState extends State<pickDestination> {
           // sheetHeight = 25.h;
           dlat = double.parse(prediction.lat!);
           dlng = double.parse(prediction.lng!);
+
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>route(
+            sourceLat: widget.sourceLat, 
+            sourceLong: widget.sourceLong, 
+            destLat: dlat, 
+            destLong: dlng
+            )));
 
           // _updateSelectedLocation(
           //     LatLng(itemlat, itemlng));
