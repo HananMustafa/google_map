@@ -2,44 +2,40 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_map/googleMap/displayPolyline.dart';
+import 'package:google_map/googleMap/direction/direction.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
-class pickDestination extends StatefulWidget {
-  final double sourceLat;
-  final double sourceLong;
-  const pickDestination({
-    super.key,
-    required this.sourceLat,
-    required this.sourceLong
-    });
+class PickSource extends StatefulWidget {
+  const PickSource({super.key});
 
   @override
-  State<pickDestination> createState() => _pickDestinationState();
+  State<PickSource> createState() => _PickSourceState();
 }
 
-class _pickDestinationState extends State<pickDestination> {
- TextEditingController predictctrl = new TextEditingController();
-  double dlat = 0;
-  double dlng = 0;
+class _PickSourceState extends State<PickSource> {
+  TextEditingController predictctrl = TextEditingController();
+  double slat = 0;
+  double slng = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        title: Text('Pick Destination', style: TextStyle(color: Colors.white),),
-        backgroundColor: Color.fromRGBO(62, 75, 255, 1),
-        iconTheme: IconThemeData(color: Colors.white,),
+        title: const Text(
+          'Pick Source',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color.fromRGBO(62, 75, 255, 1),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
-
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             placesAutoCompleteTextField(),
           ],
         ),
@@ -49,10 +45,10 @@ class _pickDestinationState extends State<pickDestination> {
 
   placesAutoCompleteTextField() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GooglePlaceAutoCompleteTextField(
         textEditingController: predictctrl,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 15,
           color: Colors.black,
         ),
@@ -60,26 +56,27 @@ class _pickDestinationState extends State<pickDestination> {
         inputDecoration: const InputDecoration(
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
-          hintText: "Enter Destination",
+          hintText: "Enter Source",
         ),
         debounceTime: 400,
         countries: const ["pk"],
         isLatLngRequired: true,
         getPlaceDetailWithLatLng: (Prediction prediction) {
           log(prediction.description.toString());
+          log(prediction.lat.toString());
           ////focusNode.unfocus();
           SystemChannels.textInput.invokeMethod('TextInput.hide');
           // sheetHeight = 25.h;
-          dlat = double.parse(prediction.lat!);
-          dlng = double.parse(prediction.lng!);
+          slat = double.parse(prediction.lat!);
+          slng = double.parse(prediction.lng!);
 
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>displayPolyline(
-            sourceLat: widget.sourceLat, 
-            sourceLong: widget.sourceLong, 
-            destLat: dlat, 
-            destLong: dlng
-            )));
-
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Direction(
+                      sourceLat: slat,
+                      sourceLong: slng,
+                      sourceDescription: prediction.description.toString())));
           // _updateSelectedLocation(
           //     LatLng(itemlat, itemlng));
           // _getRoute();

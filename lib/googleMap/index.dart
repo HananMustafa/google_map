@@ -3,23 +3,23 @@ import 'package:google_map/googleMap/direction/direction.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class index extends StatefulWidget {
-  const index({super.key});
+class Index extends StatefulWidget {
+  const Index({super.key});
 
   @override
-  State<index> createState() => _indexState();
+  State<Index> createState() => _IndexState();
 }
 
-class _indexState extends State<index> {
+class _IndexState extends State<Index> {
   static const LatLng _pSource = LatLng(33.5968788, 73.0528412);
 
   //For getting Current Location
-  Location _locationController = new Location();
+  final Location _locationController = Location();
 
-  LatLng? _currentP = null;
+  LatLng? _currentP;
   double? currentLat=0;
   double? currentLong=0;
-  String? sourceDescription=null;
+  String? sourceDescription;
 
   @override
   initState() {
@@ -29,20 +29,20 @@ class _indexState extends State<index> {
 
   //Function to get Current Location
   Future<void> getLocationUpdates() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await _locationController.serviceEnabled();
-    if (_serviceEnabled) {
-      _serviceEnabled = await _locationController.requestService();
+    serviceEnabled = await _locationController.serviceEnabled();
+    if (serviceEnabled) {
+      serviceEnabled = await _locationController.requestService();
     } else {
       return;
     }
 
-    _permissionGranted = await _locationController.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _locationController.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await _locationController.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _locationController.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -79,10 +79,10 @@ class _indexState extends State<index> {
             //If we have the Current Position
             : GoogleMap(
                 initialCameraPosition:
-                    CameraPosition(target: _pSource, zoom: 13),
+                    const CameraPosition(target: _pSource, zoom: 13),
                 markers: {
                   Marker(
-                      markerId: MarkerId("_currentLocation"),
+                      markerId: const MarkerId("_currentLocation"),
                       icon: BitmapDescriptor.defaultMarkerWithHue(
                           BitmapDescriptor.hueBlue),
                       position: _currentP!),
@@ -90,16 +90,16 @@ class _indexState extends State<index> {
               ),
         Container(
             alignment: Alignment.bottomRight,
-            margin: EdgeInsets.only(bottom: 120),
+            margin: const EdgeInsets.only(bottom: 120),
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>direction(
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Direction(
                     sourceLat: currentLat!, 
                     sourceLong: currentLong!,
                     sourceDescription: sourceDescription!,
                     )));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.directions,
                   size: 45,
                   color: Color.fromRGBO(62, 75, 255, 1),

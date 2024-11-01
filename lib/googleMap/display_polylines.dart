@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:google_map/googleMap/direction/direction.dart';
+import 'package:google_map/googleMap/direction/Direction.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class displayPolyline extends StatefulWidget {
+class DisplayPolyline extends StatefulWidget {
   final double sourceLat;
   final double sourceLong;
   final double destLat;
   final double destLong;
 
-  const displayPolyline(
+  const DisplayPolyline(
       {super.key,
       required this.sourceLat,
       required this.sourceLong,
@@ -19,21 +19,20 @@ class displayPolyline extends StatefulWidget {
       required this.destLong});
 
   @override
-  State<displayPolyline> createState() => _displayPolylineState();
+  State<DisplayPolyline> createState() => _DisplayPolylineState();
 }
 
-class _displayPolylineState extends State<displayPolyline> {
-
+class _DisplayPolylineState extends State<DisplayPolyline> {
   late LatLng _pSource;
   late LatLng _pDestination;
 
   //For getting Current Location
-  Location _locationController = new Location();
+  final Location _locationController = Location();
 
-  LatLng? _currentP = null;
+  LatLng? _currentP;
   double? currentLat = 0;
   double? currentLong = 0;
-  String? sourceDescription = null;
+  String? sourceDescription;
 
   Map<PolylineId, Polyline> polylines = {};
 
@@ -46,7 +45,7 @@ class _displayPolylineState extends State<displayPolyline> {
     getLocationUpdates().then(
       (_) => {
         getPolylinePoints().then((coordinates) => {
-              print(coordinates),
+              // print(coordinates),
               generatePolyLineFromPoints(coordinates),
             }),
       },
@@ -55,20 +54,20 @@ class _displayPolylineState extends State<displayPolyline> {
 
   //Function to get Current Location
   Future<void> getLocationUpdates() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await _locationController.serviceEnabled();
-    if (_serviceEnabled) {
-      _serviceEnabled = await _locationController.requestService();
+    serviceEnabled = await _locationController.serviceEnabled();
+    if (serviceEnabled) {
+      serviceEnabled = await _locationController.requestService();
     } else {
       return;
     }
 
-    _permissionGranted = await _locationController.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _locationController.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await _locationController.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _locationController.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -86,9 +85,9 @@ class _displayPolylineState extends State<displayPolyline> {
           currentLong = currentLocation.longitude;
           sourceDescription = "Your Location";
 
-          print("Ping: $_currentP");
-          print("Source Lat: ${widget.sourceLat}");
-          print("Source Long: ${widget.sourceLong}");
+          // print("Ping: $_currentP");
+          // print("Source Lat: ${widget.sourceLat}");
+          // print("Source Long: ${widget.sourceLong}");
         });
       }
     });
@@ -112,17 +111,17 @@ class _displayPolylineState extends State<displayPolyline> {
                     CameraPosition(target: _pSource, zoom: 13),
                 markers: {
                   Marker(
-                      markerId: MarkerId("_currentLocation"),
+                      markerId: const MarkerId("_currentLocation"),
                       icon: BitmapDescriptor.defaultMarkerWithHue(
                           BitmapDescriptor.hueBlue),
                       position: _currentP!),
                   Marker(
-                      markerId: MarkerId("_sourceLocation"),
+                      markerId: const MarkerId("_sourceLocation"),
                       icon: BitmapDescriptor.defaultMarkerWithHue(
                           BitmapDescriptor.hueBlue),
                       position: _pSource),
                   Marker(
-                      markerId: MarkerId("_destinationLocation"),
+                      markerId: const MarkerId("_destinationLocation"),
                       icon: BitmapDescriptor.defaultMarker,
                       position: _pDestination)
                 },
@@ -130,19 +129,19 @@ class _displayPolylineState extends State<displayPolyline> {
               ),
         Container(
             alignment: Alignment.bottomRight,
-            margin: EdgeInsets.only(bottom: 120),
+            margin: const EdgeInsets.only(bottom: 120),
             child: IconButton(
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => direction(
+                          builder: (context) => Direction(
                                 sourceLat: currentLat!,
                                 sourceLong: currentLong!,
                                 sourceDescription: sourceDescription!,
                               )));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.directions,
                   size: 45,
                   color: Color.fromRGBO(62, 75, 255, 1),
@@ -164,17 +163,17 @@ class _displayPolylineState extends State<displayPolyline> {
       ),
     );
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+      }
     } else {
-      print(result.errorMessage);
+      // print(result.errorMessage);
     }
     return polylineCoordinates;
   }
 
   void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
         color: Colors.blue,

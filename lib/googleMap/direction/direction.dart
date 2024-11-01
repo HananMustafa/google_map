@@ -1,46 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_map/googleMap/direction/pickDestination.dart';
-import 'package:google_map/googleMap/direction/pickSource.dart';
+import 'package:google_map/googleMap/direction/pick_destination.dart';
+import 'package:google_map/googleMap/direction/pick_source.dart';
 
-class direction extends StatefulWidget {
+class Direction extends StatefulWidget {
   final double sourceLat;
   final double sourceLong;
   final String sourceDescription;
 
-  const direction(
+  const Direction(
       {super.key,
       required this.sourceLat,
       required this.sourceLong,
       required this.sourceDescription});
 
   @override
-  State<direction> createState() => _directionState();
+  State<Direction> createState() => _DirectionState();
 }
 
-class _directionState extends State<direction> {
-  TextEditingController sourceCTRL = new TextEditingController();
-  TextEditingController destinationCTRL = new TextEditingController();
+class _DirectionState extends State<Direction> {
+  TextEditingController sourceCTRL = TextEditingController();
+  TextEditingController destinationCTRL = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 140,
-          backgroundColor: Color.fromRGBO(62, 75, 255, 1),
-          iconTheme: IconThemeData(
+          backgroundColor: const Color.fromRGBO(62, 75, 255, 1),
+          iconTheme: const IconThemeData(
             color: Colors.white,
           ),
           title: Column(
             children: [
               //SOURCE
-              Container(
+              SizedBox(
                 // alignment: Alignment.center,
                 height: 40,
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => pickSource()));
+                        MaterialPageRoute(builder: (context) => const PickSource()));
                   },
                   child: TextField(
                     controller: sourceCTRL,
@@ -52,10 +52,10 @@ class _directionState extends State<direction> {
                       fillColor: Colors.white,
                       hintStyle: GoogleFonts.merriweatherSans(
                         fontSize: 14,
-                        color: Color.fromRGBO(62, 75, 255, 1),
+                        color: const Color.fromRGBO(62, 75, 255, 1),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                         borderSide: BorderSide.none,
@@ -69,7 +69,7 @@ class _directionState extends State<direction> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color:
-                              Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
+                              const Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
                           width: 0.5,
                         ),
                       ),
@@ -80,14 +80,14 @@ class _directionState extends State<direction> {
 
               //DESTINATION
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: const EdgeInsets.only(top: 10),
                 height: 40,
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => pickDestination(
+                            builder: (context) => PickDestination(
                                 sourceLat: widget.sourceLat,
                                 sourceLong: widget.sourceLong)));
                   },
@@ -103,7 +103,7 @@ class _directionState extends State<direction> {
                         fontSize: 14,
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                         borderSide: BorderSide.none,
@@ -117,7 +117,7 @@ class _directionState extends State<direction> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color:
-                              Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
+                              const Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
                           width: 0.5,
                         ),
                       ),
