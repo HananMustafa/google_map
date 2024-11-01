@@ -2,8 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_map/main.dart';
-import 'package:google_map/pages/direction.dart';
+import 'package:google_map/googleMap/direction/direction.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
@@ -14,11 +13,6 @@ class pickSource extends StatefulWidget {
   State<pickSource> createState() => _pickSourceState();
 }
 
-void main() async{
-  await dotenv.load(fileName: ".env");
-  runApp(const MyApp());
-}
-
 class _pickSourceState extends State<pickSource> {
   TextEditingController predictctrl = new TextEditingController();
   double slat = 0;
@@ -27,14 +21,16 @@ class _pickSourceState extends State<pickSource> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        title: Text('Pick Source', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Pick Source',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color.fromRGBO(62, 75, 255, 1),
-        iconTheme: IconThemeData(color: Colors.white,),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
-
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -74,11 +70,13 @@ class _pickSourceState extends State<pickSource> {
           slat = double.parse(prediction.lat!);
           slng = double.parse(prediction.lng!);
 
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>direction(
-            sourceLat: slat, 
-            sourceLong: slng, 
-            sourceDescription: prediction.description.toString()
-            )));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => direction(
+                      sourceLat: slat,
+                      sourceLong: slng,
+                      sourceDescription: prediction.description.toString())));
           // _updateSelectedLocation(
           //     LatLng(itemlat, itemlng));
           // _getRoute();

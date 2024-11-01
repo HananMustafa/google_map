@@ -2,15 +2,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_map/main.dart';
-import 'package:google_map/pages/route.dart';
+import 'package:google_map/googleMap/displayPolyline.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
-void main() async{
-  await dotenv.load(fileName: ".env");
-  runApp(const MyApp());
-}
 class pickDestination extends StatefulWidget {
   final double sourceLat;
   final double sourceLong;
@@ -78,7 +73,7 @@ class _pickDestinationState extends State<pickDestination> {
           dlat = double.parse(prediction.lat!);
           dlng = double.parse(prediction.lng!);
 
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>route(
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>displayPolyline(
             sourceLat: widget.sourceLat, 
             sourceLong: widget.sourceLong, 
             destLat: dlat, 

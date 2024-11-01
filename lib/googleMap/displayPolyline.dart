@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:google_map/pages/direction.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_map/googleMap/direction/direction.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class route extends StatefulWidget {
+class displayPolyline extends StatefulWidget {
   final double sourceLat;
   final double sourceLong;
   final double destLat;
   final double destLong;
 
-  const route({
-    super.key,
-    required this.sourceLat,
-    required this.sourceLong,
-    required this.destLat,
-    required this.destLong
-    });
+  const displayPolyline(
+      {super.key,
+      required this.sourceLat,
+      required this.sourceLong,
+      required this.destLat,
+      required this.destLong});
 
   @override
-  State<route> createState() => _routeState();
+  State<displayPolyline> createState() => _displayPolylineState();
 }
 
-class _routeState extends State<route> {
-  // static const LatLng _pSource = LatLng(37.4219983, -122.084);
-  // static const LatLng _pDestination = LatLng(37.5968788, -122.0528412);
+class _displayPolylineState extends State<displayPolyline> {
 
   late LatLng _pSource;
   late LatLng _pDestination;
@@ -32,16 +31,26 @@ class _routeState extends State<route> {
   Location _locationController = new Location();
 
   LatLng? _currentP = null;
-  double? currentLat=0;
-  double? currentLong=0;
-  String? sourceDescription=null;
+  double? currentLat = 0;
+  double? currentLong = 0;
+  String? sourceDescription = null;
+
+  Map<PolylineId, Polyline> polylines = {};
 
   @override
   initState() {
     super.initState();
-    _pSource= LatLng(widget.sourceLat, widget.sourceLong);
-    _pDestination= LatLng(widget.destLat, widget.destLong);
-    getLocationUpdates();
+    _pSource = LatLng(widget.sourceLat, widget.sourceLong);
+    _pDestination = LatLng(widget.destLat, widget.destLong);
+
+    getLocationUpdates().then(
+      (_) => {
+        getPolylinePoints().then((coordinates) => {
+              print(coordinates),
+              generatePolyLineFromPoints(coordinates),
+            }),
+      },
+    );
   }
 
   //Function to get Current Location
@@ -73,9 +82,9 @@ class _routeState extends State<route> {
           //Updating the current location
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
-              currentLat= currentLocation.latitude;
-              currentLong= currentLocation.longitude;
-              sourceDescription= "Your Location";
+          currentLat = currentLocation.latitude;
+          currentLong = currentLocation.longitude;
+          sourceDescription = "Your Location";
 
           print("Ping: $_currentP");
           print("Source Lat: ${widget.sourceLat}");
@@ -109,24 +118,29 @@ class _routeState extends State<route> {
                       position: _currentP!),
                   Marker(
                       markerId: MarkerId("_sourceLocation"),
-                      icon: BitmapDescriptor.defaultMarker,
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueBlue),
                       position: _pSource),
                   Marker(
                       markerId: MarkerId("_destinationLocation"),
                       icon: BitmapDescriptor.defaultMarker,
                       position: _pDestination)
                 },
+                polylines: Set<Polyline>.of(polylines.values),
               ),
         Container(
             alignment: Alignment.bottomRight,
             margin: EdgeInsets.only(bottom: 120),
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>direction(
-                    sourceLat: currentLat!, 
-                    sourceLong: currentLong!,
-                    sourceDescription: sourceDescription!,
-                    )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => direction(
+                                sourceLat: currentLat!,
+                                sourceLong: currentLong!,
+                                sourceDescription: sourceDescription!,
+                              )));
                 },
                 icon: Icon(
                   Icons.directions,
@@ -135,5 +149,39 @@ class _routeState extends State<route> {
                 ))),
       ],
     ));
+  }
+
+  Future<List<LatLng>> getPolylinePoints() async {
+    List<LatLng> polylineCoordinates = [];
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleApiKey: dotenv.env['API_KEY'],
+      request: PolylineRequest(
+        origin: PointLatLng(_pSource.latitude, _pSource.longitude),
+        destination:
+            PointLatLng(_pDestination.latitude, _pDestination.longitude),
+        mode: TravelMode.driving,
+      ),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print(result.errorMessage);
+    }
+    return polylineCoordinates;
+  }
+
+  void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.blue,
+        points: polylineCoordinates,
+        width: 8);
+    setState(() {
+      polylines[id] = polyline;
+    });
   }
 }

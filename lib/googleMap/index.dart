@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_map/pages/direction.dart';
+import 'package:google_map/googleMap/direction/direction.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+class index extends StatefulWidget {
+  const index({super.key});
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<index> createState() => _indexState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _indexState extends State<index> {
   static const LatLng _pSource = LatLng(33.5968788, 73.0528412);
-  static const LatLng _pDestination = LatLng(33.5968788, 73.0528412);
 
   //For getting Current Location
   Location _locationController = new Location();
@@ -60,8 +59,6 @@ class _MapPageState extends State<MapPage> {
               currentLat= currentLocation.latitude;
               currentLong= currentLocation.longitude;
               sourceDescription= "Your Location";
-
-          print("Ping: $_currentP");
         });
       }
     });
@@ -89,14 +86,6 @@ class _MapPageState extends State<MapPage> {
                       icon: BitmapDescriptor.defaultMarkerWithHue(
                           BitmapDescriptor.hueBlue),
                       position: _currentP!),
-                  Marker(
-                      markerId: MarkerId("_sourceLocation"),
-                      icon: BitmapDescriptor.defaultMarker,
-                      position: _pSource),
-                  Marker(
-                      markerId: MarkerId("_destinationLocation"),
-                      icon: BitmapDescriptor.defaultMarker,
-                      position: _pDestination)
                 },
               ),
         Container(

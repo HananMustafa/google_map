@@ -22,6 +22,7 @@ dependencies:
   google_places_flutter: ^2.0.9
   google_fonts: ^6.2.0
   flutter_dotenv: ^5.2.1
+  flutter_polyline_points: ^2.1.0
 
 
 
