@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_map/googleMap/direction/direction.dart';
+import 'package:google_map/provider/map_providers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class Index extends StatefulWidget {
+class Index extends ConsumerStatefulWidget {
   const Index({super.key});
 
   @override
-  State<Index> createState() => _IndexState();
+  ConsumerState<Index> createState() => _IndexState();
 }
 
-class _IndexState extends State<Index> {
-  static const LatLng _pSource = LatLng(33.5968788, 73.0528412);
-
-  //For getting Current Location
+class _IndexState extends ConsumerState<Index> {
   final Location _locationController = Location();
-
-  LatLng? _currentP;
-  double? currentLat=0;
-  double? currentLong=0;
-  String? sourceDescription;
 
   @override
   initState() {
@@ -27,84 +21,76 @@ class _IndexState extends State<Index> {
     getLocationUpdates();
   }
 
-  //Function to get Current Location
   Future<void> getLocationUpdates() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
     serviceEnabled = await _locationController.serviceEnabled();
-    if (serviceEnabled) {
+    if (!serviceEnabled) {
       serviceEnabled = await _locationController.requestService();
-    } else {
-      return;
+      if (!serviceEnabled) return;
     }
 
     permissionGranted = await _locationController.hasPermission();
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await _locationController.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
+      if (permissionGranted != PermissionStatus.granted) return;
     }
 
-    //GETTING CONTINOUS CALLBACKS WHEN LOCATION IS CHANGING
-    _locationController.onLocationChanged
-        .listen((LocationData currentLocation) {
-      if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
-        setState(() {
-          //Updating the current location
-          _currentP =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
-              currentLat= currentLocation.latitude;
-              currentLong= currentLocation.longitude;
-              sourceDescription= "Your Location";
-        });
+    _locationController.onLocationChanged.listen((LocationData currentLocation) {
+      if (currentLocation.latitude != null && currentLocation.longitude != null) {
+
+        //Replaced with setState
+        ref.read(locationProvider.notifier).state =
+            LatLng(currentLocation.latitude!, currentLocation.longitude!);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentLocation = ref.watch(locationProvider);
+
     return Scaffold(
-
-        //IF Current Position = null
-        body: Stack(
-      children: [
-        _currentP == null
-            ? const Center(
-                child: Text('Loading...'),
-              )
-
-            //If we have the Current Position
-            : GoogleMap(
-                initialCameraPosition:
-                    const CameraPosition(target: _pSource, zoom: 13),
-                markers: {
-                  Marker(
+      body: Stack(
+        children: [
+          currentLocation == null
+              ? const Center(child: Text('Loading...'))
+              : GoogleMap(
+                  initialCameraPosition: CameraPosition(target: currentLocation, zoom: 13),
+                  markers: {
+                    Marker(
                       markerId: const MarkerId("_currentLocation"),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueBlue),
-                      position: _currentP!),
-                },
-              ),
-        Container(
+                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                      position: currentLocation,
+                    ),
+                  },
+                ),
+          Container(
             alignment: Alignment.bottomRight,
             margin: const EdgeInsets.only(bottom: 120),
             child: IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Direction(
-                    sourceLat: currentLat!, 
-                    sourceLong: currentLong!,
-                    sourceDescription: sourceDescription!,
-                    )));
-                },
-                icon: const Icon(
-                  Icons.directions,
-                  size: 45,
-                  color: Color.fromRGBO(62, 75, 255, 1),
-                ))),
-      ],
-    ));
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Direction(
+                      sourceLat: currentLocation!.latitude,
+                      sourceLong: currentLocation.longitude,
+                      sourceDescription: "Your Location",
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.directions,
+                size: 45,
+                color: Color.fromRGBO(62, 75, 255, 1),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
