@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_map/googleMap/direction/pick_destination.dart';
 import 'package:google_map/googleMap/direction/pick_source.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Direction extends StatefulWidget {
   final double sourceLat;
@@ -26,7 +27,7 @@ class _DirectionState extends State<Direction> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          toolbarHeight: 140,
+          toolbarHeight: 18.h,
           backgroundColor: const Color.fromRGBO(62, 75, 255, 1),
           iconTheme: const IconThemeData(
             color: Colors.white,
@@ -36,7 +37,7 @@ class _DirectionState extends State<Direction> {
               //SOURCE
               SizedBox(
                 // alignment: Alignment.center,
-                height: 40,
+                height: 6.h,
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
@@ -51,26 +52,26 @@ class _DirectionState extends State<Direction> {
                       filled: true,
                       fillColor: Colors.white,
                       hintStyle: GoogleFonts.merriweatherSans(
-                        fontSize: 14,
+                        fontSize: 17.sp,
                         color: const Color.fromRGBO(62, 75, 255, 1),
                       ),
                       contentPadding:
-                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0), //2.w
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(2.5.w), 
                         borderSide: BorderSide.none,
                       ),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color.fromRGBO(62, 75, 255, 1),
-                          width: 2.0,
+                          width: 2.0, //0.5.w
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color:
                               const Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
-                          width: 0.5,
+                          width: 0.5, //0.2.w
                         ),
                       ),
                     ),
@@ -80,8 +81,8 @@ class _DirectionState extends State<Direction> {
 
               //DESTINATION
               Container(
-                margin: const EdgeInsets.only(top: 10),
-                height: 40,
+                margin: const EdgeInsets.only(top: 10), //1.h
+                height: 6.h, 
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
@@ -100,25 +101,25 @@ class _DirectionState extends State<Direction> {
                       filled: true,
                       fillColor: Colors.white,
                       hintStyle: GoogleFonts.merriweatherSans(
-                        fontSize: 14,
+                        fontSize: 17.sp, 
                       ),
                       contentPadding:
-                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0), //2.w
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(2.5.w), 
                         borderSide: BorderSide.none,
                       ),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color.fromRGBO(62, 75, 255, 1),
-                          width: 2.0,
+                          width: 2.0, //0.5.w
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color:
                               const Color.fromRGBO(255, 107, 0, 1).withOpacity(0.5),
-                          width: 0.5,
+                          width: 0.5, //0.2.w
                         ),
                       ),
                     ),

@@ -24,6 +24,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_polyline_points: ^2.1.0
   flutter_riverpod: ^2.6.1
+  responsive_sizer: ^3.3.1
 
 
 
