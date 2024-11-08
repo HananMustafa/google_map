@@ -28,6 +28,8 @@ class _DisplayPolylineState extends ConsumerState<DisplayPolyline> {
   late LatLng _pSource;
   late LatLng _pDestination;
 
+  LatLng? station;
+
   @override
   initState() {
     super.initState();
@@ -54,6 +56,10 @@ class _DisplayPolylineState extends ConsumerState<DisplayPolyline> {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
+
+      setState(() {
+        station = polylineCoordinates[15];
+      });
     } else {
       // print(result.errorMessage);
     }
@@ -102,6 +108,11 @@ class _DisplayPolylineState extends ConsumerState<DisplayPolyline> {
                     Marker(
                         markerId: const MarkerId("_destinationLocation"),
                         position: _pDestination),
+
+                        if(station != null)
+                    Marker(
+                        markerId: const MarkerId("_Station"),
+                        position: station!),
                   },
                   polylines: Set<Polyline>.of(polylines.values),
                 ),
