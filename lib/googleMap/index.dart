@@ -85,7 +85,7 @@ class _IndexState extends ConsumerState<Index> {
               icon: const Icon(
                 Icons.directions,
                 size: 45,
-                color: Color.fromRGBO(62, 75, 255, 1),
+                color: const Color.fromRGBO(5, 185, 95, 1),
               ),
             ),
           ),

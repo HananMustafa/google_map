@@ -28,7 +28,7 @@ class _DirectionState extends State<Direction> {
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 18.h,
-          backgroundColor: const Color.fromRGBO(62, 75, 255, 1),
+          backgroundColor: const Color.fromRGBO(5, 185, 95, 1),
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
@@ -53,7 +53,7 @@ class _DirectionState extends State<Direction> {
                       fillColor: Colors.white,
                       hintStyle: GoogleFonts.merriweatherSans(
                         fontSize: 17.sp,
-                        color: const Color.fromRGBO(62, 75, 255, 1),
+                        color: const Color.fromRGBO(5, 185, 95, 1),
                       ),
                       contentPadding:
                           const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0), //2.w
@@ -128,6 +128,11 @@ class _DirectionState extends State<Direction> {
               ),
             ],
           )),
+
+          body: Container(
+                  decoration: const BoxDecoration(),
+                  child: Image.asset("assets/images/source_icon.png"),
+                ),
     );
   }
 }

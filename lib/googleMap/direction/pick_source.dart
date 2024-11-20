@@ -26,7 +26,7 @@ class _PickSourceState extends State<PickSource> {
           'Pick Source',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color.fromRGBO(62, 75, 255, 1),
+        backgroundColor: const Color.fromRGBO(5, 185, 95, 1),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
